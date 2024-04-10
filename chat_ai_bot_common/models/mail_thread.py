@@ -8,13 +8,7 @@ from odoo.tools import html2plaintext, plaintext2html
 from odoo import models, fields, api, _
 from odoo.exceptions import MissingError, AccessError, UserError
 
-# Logger settings. In this module we set messages in green textcolor
 _logger = logging.getLogger(__name__)
-# Set textcolor into green, must be head in message. (gn for green)
-blue = "\033[34m"
-# Reset Color to default, must be tail in message. (cr for color reset)
-color_reset = "\033[0m"
-
 
 # ~ You are Open Interpreter, a world-class programmer that can complete any goal by executing code.
 # ~ First, write a plan. **Always recap the plan between each code block** (you have extreme short-term memory loss, so you need to recap the plan between each message block to retain it).
@@ -34,11 +28,11 @@ class MailThread(models.AbstractModel):
         """ Hook to add custom behavior after having posted the message. Both
         message and computed value are given, to try to lessen query count by
         using already-computed values instead of having to rebrowse things. """
+        
         res = super(MailThread, self)._message_post_after_hook(message, msg_vals)
 
         if msg_vals['model'] == 'mail.channel':
 
-            _logger.info(f"{blue}MailThread.{color_reset}")
             obj = self.env[msg_vals['model']].browse(msg_vals['res_id'])
 
             for recipient in self.env['res.users'].search(
@@ -50,7 +44,15 @@ class MailThread(models.AbstractModel):
                         args=(recipient, obj, message.author_id, html2plaintext(message.body).strip())
                     )
                     ai_action.start()
-                    # return {'type': 'ir.actions.client', 'tag': 'reload'}
+                    # return {'type': 'ir.actions.client', 'tag': 'reload'}   
+                            
+            _logger.info(f"""
+                         
+                                            MailThread: _message_post_after_hook:
+                                            Author: [\033[1;33m{message.author_id.name}\033[0m]
+                                            Message: [\033[1;33m{message.body}\033[0m]                                            
+                         """)
+            
         return res
 
 # ~ https://www.linkedin.com/pulse/run-background-process-odoo-multi-threading-ahmed-rashad-mba-/

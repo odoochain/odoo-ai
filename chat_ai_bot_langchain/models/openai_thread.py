@@ -76,17 +76,7 @@ class OpenAIThread(models.TransientModel):
             raise ValueError("Message is None")    
               
         response = self.add_message(client, self.message, user_id)
-               
-        # Testing logging
-         
-        _logger.info(f"\033[1;37mThis is a info message\033[0m") 
-        _logger.info(f"\033[5;35mThis is a info message\033[0m") 
-        _logger.info(f"\033[2;32mThis is a info message\033[0m") 
-        _logger.info(f"\033[6;31mThis is a error message! ⛓️‍💥\033[0m") 
-        _logger.info(f"\033[3;33mThis is a warning message\033[0m") 
-        _logger.info(f"\033[4;34mThis is a debug message\033[0m") 
-        _logger.info(f"\033[7;36mWe are in a critical situation!!!\033[0m")       
-                   
+                                 
         if isinstance(response, AIMessage) and hasattr(response, 'content'):
             extracted_content = (f"{response.content} [END]")
             _logger.info(f"Response.content")

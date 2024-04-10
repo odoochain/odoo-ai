@@ -8,7 +8,7 @@ _logger = logging.getLogger(__name__)
 class ResUsers(models.Model):
     _inherit = 'res.users'
 
-    llm_type = fields.Selection(selection_add=[('langchain', "LangChain 🦜")], ondelete={'langchain': 'set default'})
+    llm_type = fields.Selection(selection_add=[('langchain', "LangChain 🦜🔗")], ondelete={'langchain': 'set default'})
 
     def run_ai_message_post(self, recipient, channel, author, message):
         if self.llm_type != "langchain":
@@ -27,8 +27,11 @@ class ResUsers(models.Model):
                 thread.add_message(openai_client, message, user_id, role="user")
                 response = thread.wait4response(openai_client, user_id)
 
-                _logger.info(f"\033[3;36m\n"
-                    f"    Response from LLM:\033[0m\033[3;36m   {response}\033[0m")
+                _logger.info(f"""
+                             
+                                    Response from LLM:
+                                    \033[1;30;47m{response}\033[0m")
+                            """)
         
                 channel_id.with_context(mail_create_nosubscribe=True).message_post(
                     body=f"<i>{response}</i>",
