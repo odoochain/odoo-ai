@@ -48,9 +48,9 @@ class MailThread(models.AbstractModel):
                             
             _logger.info(f"""
                          
-                                            MailThread: _message_post_after_hook:
-                                            Author: [\033[1;33m{message.author_id.name}\033[0m]
-                                            Message: [\033[1;33m{message.body}\033[0m]                                            
+                        MailThread: _message_post_after_hook:
+                        Author: [\033[1;33m{message.author_id.name}\033[0m]
+                        Message: [\033[1;33m{message.body}\033[0m]                                            
                          """)
             
         return res

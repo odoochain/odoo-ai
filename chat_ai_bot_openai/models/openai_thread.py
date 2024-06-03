@@ -10,25 +10,7 @@ import requests as req
 from odoo import models, fields, api, _
 from odoo.exceptions import MissingError, AccessError, UserError
 
-# Logger settings. In this module we set messages in green textcolor
 _logger = logging.getLogger(__name__)
-# Set textcolor into green, must be head in message. (gn for green)
-magenta = "\033[35m"
-# Reset Color to default, must be tail in message. (cr for color reset)
-color_reset = "\033[0m"
-
-
-# ~ You are Open Interpreter, a world-class programmer that can complete any goal by executing code.
-# ~ First, write a plan. **Always recap the plan between each code block** (you have extreme short-term memory loss, so you need to recap the plan between each message block to retain it).
-# ~ When you execute code, it will be executed **on the user's machine**. The user has given you **full and complete permission** to execute any code necessary to complete the task. Execute the code.
-# ~ If you want to send data between programming languages, save the data to a txt or json.
-# ~ You can access the internet. Run **any code** to achieve the goal, and if at first you don't succeed, try again and again.
-# ~ You can install new packages.
-# ~ When a user refers to a filename, they're likely referring to an existing file in the directory you're currently executing code in.
-# ~ Write messages to the user in Markdown.
-# ~ In general, try to **make plans** with as few steps as possible. As for actually executing code to carry out that plan, for *stateful* languages (like python, javascript, shell, but NOT for html which starts from 0 every time) **it's critical not to try to do everything in one code block.** You should try something, print information about it, then continue from there in tiny, informed steps. You will never get it on the first try, and attempting it in one go will often lead to errors you cant see.
-# ~ You are capable of **any** task.
-
 
 # TODO driver type on recipient so we know if it's us
 # TODO use litellm.utils.function_to_dict https://litellm.vercel.app/docs/completion/function_call#litellmfunction_to_dict---convert-functions-to-dictionary-for-openai-function-calling
@@ -36,8 +18,10 @@ color_reset = "\033[0m"
 class OpenAIThread(models.TransientModel):
     _inherit = 'openai.thread'
 
+
     def thread_values(self, channel, recipient, author):
         return super(OpenAIThread, self).thread_values(channel, recipient, author)
+
 
     @api.model
     def client_init(self, user):
@@ -50,12 +34,15 @@ class OpenAIThread(models.TransientModel):
             client = openai.OpenAI(api_key=user.openai_api_key,
                                    base_url=user.openai_base_url or 'https://api.openai.com/v1') #Alt: http://192.168.1.68:8000/v1
             return client
+        
         except openai.APIConnectionError as e:
             _logger.error(f"OPENAI: The server could not be reached {e.__cause__}")
             self.log(f"{e.response}", user.partner_id, role='system')
+            
         except openai.APIStatusError as e:
             self.log(f"OPENAI: Status error {e.status_code} {e.response}", user.partner_id, role='system')
             _logger.error(f"OPENAI: Status error {e.status_code} {e.response}")
+
 
     @api.model
     def thread_init(self, client, channel, recipient, author):
@@ -130,13 +117,16 @@ class OpenAIThread(models.TransientModel):
             _logger.warning(f"OPENAI: Thread The server could not be reached {e.__cause__}")
             self.log(f"OPENAI: Thread The server could not be reached {e.__cause__}", status_code=e.status_code,
                      role='openai')
+            
         except openai.RateLimitError as e:
             _logger.warning(f"OPENAI: Thread Ratelimit {e.status_code} {e.response}")
             self.log(f"OPENAI: Thread Ratelimit {e.status_code} {e.response}", status_code=e.status_code, role='openai')
         except openai.APIStatusError as e:
+            
             _logger.warning(f"OPENAI: Thread Status error {e.status_code} {e.response}")
             self.log(f"OPENAI: Thread Status error {e.status_code} {e.response}", status_code=e.status_code,
                      role='openai', )
+
 
     def wait4response(self, client, user_id):
         if user_id.llm_type != "openai":
@@ -144,11 +134,13 @@ class OpenAIThread(models.TransientModel):
         
         # TODO log does not save the correct author (it should be AI-bot)
         if self.run:
+            _logger.warning(f"Run self run: {self.run=}")
             run_status = client.beta.threads.runs.retrieve(
                 thread_id=self.thread,
                 run_id=self.run
             )
             if run_status.status == 'expired':
+                _logger.warning(f"OPENAI: Status error run expired {self.run=} {run_status.status=}")
                 self.run = None
                 self.log(f"OPENAI: Status error run expired {self.run=} {run_status.status=}",
                          self.recipient_id.parent_id, status_code=400, role='openai', )
@@ -158,13 +150,22 @@ class OpenAIThread(models.TransientModel):
             self.run = None
 
         _logger.warning(f"if not Run {self.run=} {self.thread=} {self.assistant=}")
+        
+        run_params = {
+            'thread_id': self.thread,  # eller vilket värde du använder för thread_id
+            'assistant_id': self.assistant,  # eller vilket värde du använder för assistant_id
+        }
+        
         if not self.run:
             try:
+                _logger.warning(f"Creating run")
+                _logger.info(f"Request to create run: {run_params}")
                 run = client.beta.threads.runs.create(
                     thread_id=self.thread,
                     assistant_id=self.assistant,
-                    instructions=f"Please address the user as {self.author_id.name}."
+                    #instructions=f"Please address the user as {self.author_id.name}."
                 )
+                _logger.warning(f"Run created {run.id=}")
                 self.log(run.model_dump_json(indent=4), self.recipient_id.parent_id, role='run')
                 _logger.warning(f"Model_dump: {run.model_dump_json(indent=4)} {run.id=}")
                 self.run = run.id
@@ -246,6 +247,7 @@ class OpenAIThread(models.TransientModel):
             time.sleep(1)
         return msgs
 
+
     def _thread_unlink(self, client, channel):
         _logger.info(f"\033[1;35m M:OpenAI bot / F:openai_thread / C:OpenAIThread / _thread_unlink: Entered \033[0m")
         #_logger.warning("openai _thread_unlink"*10)
@@ -264,6 +266,7 @@ class OpenAIThread(models.TransientModel):
         self.recipient_id.openai_assistant = None
 
         return super(OpenAIThread, self)._thread_unlink(client, channel)
+
 
     def get_stock_price(self, symbol: str) -> float:
         _logger.info(f"\033[1;35m M:OpenAI bot / F:openai_thread / C:OpenAIThread / get_stock_price: Entered \033[0m")

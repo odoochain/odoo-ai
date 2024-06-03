@@ -31,24 +31,27 @@ class ResUsers(models.Model):
     llm_type = fields.Selection([
         ('false', 'Inaktivera AI-typ'),
         ], string="LLM Type", default=False)
+    show_api_key = fields.Boolean(default=False)
     
     # LLM Type Selection
     # llm_provider = fields.Selection([
+    #     ('disabled', 'Disabled'),
+    #     ('hugging_face', 'Hugging Face API'),
     #     ('openai', 'OpenAI API'),
     #     ('local', 'Local Large Language Model'),
-    #     ('disabled', 'Disabled'),
-    # ], string="LLM Provider")
+        
+    # ], string="LLM Provider", default='False')
 
     # # Processing Status Indicator (Clear and concise label)
     # processing = fields.Boolean(string="Processing Message")
     
-    #alternative_llm_api_key = fields.Char(string="Alternative LLM API Key")
-    #alternative_llm_url = fields.Char(string="Alternative LLM URL")
-    #alternative_llm = fields.Selection([], string="Alternative LLM Model", default=False)
-    #api_key_icon = fields.Char(string="API Key Icon", compute="_compute_api_key_icon")
+    # hugging_face_api_key = fields.Char(string="Hugging Face API Key")
+    # hugging_face_api_url = fields.Char(string="Alternative LLM URL")
+    # hugging_face_llm = fields.Selection([], string="Hugging Face LLM Model", default=False)
+    # api_key_icon = fields.Char(string="API Key Icon", compute="_compute_api_key_icon")
 
     """
-    #Use this if we not want to use the slider:
+    #Use this if we not want to use the slider(s):
     
     temperatures = [
     (0.0, "0.0"),
@@ -67,6 +70,13 @@ class ResUsers(models.Model):
     openai_temperature = fields.Selection(string="Temperature", selection=temperatures, required=False)
     """
 
+    # show_api_key = fields.Boolean(string="Show API Key", default=False)
+ 
+              
+    def toggle_visibility(self):
+        self.show_api_key = not self.show_api_key
+        self.env['res.users'].invalidate_cache(fnames=['openai_api_key'], ids=self.ids)
+        _logger.info("API key visibility toggled: %s", self.show_api_key) 
 
     def run_ai_message_post(self, recipient, channel, author, message):
         _logger.info(f"\033[1;32m Common: run_ai_message_post \033[0m")

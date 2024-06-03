@@ -15,7 +15,7 @@ class ResUsers(models.Model):
             return super(ResUsers, self).run_ai_message_post(recipient, channel, author, message)
         
         _logger.info(f"Waiting some seconds...")            
-        time.sleep(3)
+        time.sleep(1)
         
         with self.env.registry.cursor() as cr:
             try:
@@ -29,9 +29,10 @@ class ResUsers(models.Model):
 
                 _logger.info(f"""
                              
-                                    Response from LLM:
-                                    \033[1;30;47m{response}\033[0m")
-                            """)
+                    Response: [chat_ai_bot_langchain.res_users.run_ai_message_post]
+                    \033[1;30;47m{response}\033[0m")
+                    
+                    """)
         
                 channel_id.with_context(mail_create_nosubscribe=True).message_post(
                     body=f"<i>{response}</i>",
