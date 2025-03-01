@@ -4,206 +4,1089 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 18.0\n"
+"Project-Id-Version: Odoo Server 16.0-20241230\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-15 12:00+0000\n"
-"PO-Revision-Date: 2023-11-15 12:00+0000\n"
+"POT-Creation-Date: 2025-01-07 10:42+0000\n"
+"PO-Revision-Date: 2025-01-07 16:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #. module: ai_agent
-#: model:ir.module.category,description:ai_agent.module_category_ai_agent
-msgid "AI Agent orchestration"
-msgstr "AI代理编排"
+#: model_terms:ir.ui.view,arch_db:ai_agent.view_ai_agent_kanban
+msgid "<i class=\"fa fa-clock-o\" title=\"Date\"/>"
+msgstr "<i class=\"fa fa-clock-o\" title=\"日期\"/>"
 
 #. module: ai_agent
-#: model:ir.actions.act_window,name:ai_agent.action_ai_agent
-#: model:ir.ui.menu,name:ai_agent.menu_ai_agent
-#: model_terms:ir.ui.view,arch_db:ai_agent.ai_agent_list
-msgid "AI Agents"
-msgstr "AI代理"
+#: model_terms:ir.ui.view,arch_db:ai_agent.ai_agent_llm_kanban
+msgid "<span class=\"fa fa-clock-o me-2\" title=\"Dates\"/>"
+msgstr "<span class=\"fa fa-clock-o me-2\" title=\"日期\"/>"
 
 #. module: ai_agent
-#: model_terms:ir.ui.view,arch_db:ai_agent.ai_agent_search
-msgid "Search AI Agents"
-msgstr "搜索AI代理"
+#: model_terms:ir.ui.view,arch_db:ai_agent.view_ai_quest_kanban
+msgid "<span class=\"fa fa-ellipsis-v\" aria-label=\"Manage\" title=\"Manage\"/>"
+msgstr "<span class=\"fa fa-ellipsis-v\" aria-label=\"管理\" title=\"管理\"/>"
 
 #. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_agent__name
-msgid "Name"
-msgstr "名称"
+#: model_terms:ir.ui.view,arch_db:ai_agent.ai_agent_llm_kanban
+msgid "<span>&amp;nbsp;</span>"
+msgstr "<span>&amp;nbsp;</span>"
 
 #. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_agent__ai_type
-msgid "Type"
-msgstr "类型"
+#: model_terms:ir.ui.view,arch_db:ai_agent.view_ai_quest_kanban
+msgid "<strong>Agents: </strong>"
+msgstr "<strong>代理： </strong>"
 
 #. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_agent__ai_agent_llm_id
-msgid "LLM"
-msgstr "大语言模型"
+#: model_terms:ir.ui.view,arch_db:ai_agent.view_ai_quest_kanban
+msgid "<strong>Initiate: </strong>"
+msgstr "<strong>启动： </strong>"
 
 #. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_agent__ai_role
-msgid "Role"
-msgstr "角色"
+#: model_terms:ir.ui.view,arch_db:ai_agent.view_ai_quest_kanban
+msgid "<strong>Sessions: </strong>"
+msgstr "<strong>会话： </strong>"
 
 #. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_agent__ai_temperature
-msgid "Temperature"
-msgstr "温度"
-
-#. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_agent__object_id
-msgid "Object"
-msgstr "对象"
-
-#. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_agent__session_count
-msgid "Sessions"
-msgstr "会话数"
-
-#. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_agent__session_line_count
-msgid "Tokens"
-msgstr "令牌数"
-
-#. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_agent__quest_count
-msgid "Quests"
-msgstr "任务"
-
-#. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_agent__last_run
-msgid "Last Run"
-msgstr "最后运行"
-
-#. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_agent__status
-msgid "Status"
-msgstr "状态"
-
-#. module: ai_agent
-#: model:ir.model.fields.selection,name:ai_agent.selection__ai_agent__status__draft
-msgid "Draft"
-msgstr "草稿"
-
-#. module: ai_agent
-#: model:ir.model.fields.selection,name:ai_agent.selection__ai_agent__status__active
-msgid "Active"
-msgstr "活跃"
-
-#. module: ai_agent
-#: model:ir.model.fields.selection,name:ai_agent.selection__ai_agent__status__done
-msgid "Done"
-msgstr "完成"
-
-#. module: ai_agent
-#: model:ir.model.fields.selection,name:ai_agent.selection__ai_agent__status__error
-msgid "Error"
-msgstr "错误"
-
-#. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_agent__is_favorite
-msgid "Favorite"
-msgstr "收藏"
-
-#. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_agent__debug
-msgid "Debug"
-msgstr "调试"
+#: model:ir.model.fields,help:ai_agent.field_ai_quest__alias_defaults
+msgid ""
+"A Python dictionary that will be evaluated to provide default values when "
+"creating new records for this alias."
+msgstr ""
+"一个 Python 字典，用于在为该别名创建新记录时提供默认值。"
 
 #. module: ai_agent
 #: model:ir.model,name:ai_agent.model_ai_agent
 msgid "AI Agent"
-msgstr "AI代理"
+msgstr "AI 代理"
 
 #. module: ai_agent
-#: model:ir.model,name:ai_agent.model_ai_memory_test_wizard
-msgid "A testing wizard for ai memory"
-msgstr "AI记忆测试向导"
+#: model:ir.model,name:ai_agent.model_ai_agent_data
+msgid "AI Agent Data"
+msgstr "AI 代理数据"
 
 #. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_memory_test_wizard__test_rag_input
-msgid "Search"
-msgstr "搜索"
+#: model:ir.model,name:ai_agent.model_ai_agent_llm
+msgid "AI Agent LLM"
+msgstr "AI 代理 LLM"
 
 #. module: ai_agent
-#: model_terms:ir.ui.view,arch_db:ai_agent.test_wizard_view
-msgid "Warning"
-msgstr "警告"
+#: model_terms:ir.ui.view,arch_db:ai_agent.view_ai_agent_llm_tree
+msgid "AI Agent LLMs"
+msgstr "AI 代理 LLM 列表"
 
 #. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_agent_test_wizard__ai_agent_id
-msgid "AI Agent"
-msgstr "AI代理"
+#: model_terms:ir.ui.view,arch_db:ai_agent.ai_agent_list
+#: model_terms:ir.ui.view,arch_db:ai_agent.view_ai_agent_calendar
+msgid "AI Agents"
+msgstr "AI 代理列表"
 
 #. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_agent_test_wizard__ai_prompt_template
-msgid "Prompt Template"
-msgstr "提示模板"
+#: model:ir.ui.menu,name:ai_agent.menu_ai_agent_root
+msgid "AI Orchestration"
+msgstr "AI 编排"
 
 #. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_agent_test_wizard__ai_input
-msgid "Input"
-msgstr "输入"
+#: model:ir.model.fields.selection,name:ai_agent.selection__ai_agent__ai_type__ai-programmer
+msgid "AI Programmer"
+msgstr "AI 程序员"
 
 #. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_quest_test_mail_wizard__ai_quest_id
+#: model:ir.actions.act_window,name:ai_agent.action_ai_quest
+#: model:ir.model,name:ai_agent.model_ai_quest
 msgid "AI Quest"
-msgstr "AI任务"
+msgstr "AI 任务"
 
 #. module: ai_agent
-#: model:ir.model.fields,help:ai_agent.field_ai_agent__ai_temperature
-msgid "Controls randomness in the output. Lower values make the model more deterministic, higher values make it more creative."
-msgstr "控制输出的随机性。较低的值使模型更加确定性，较高的值使其更具创造性。"
+#: model:ir.model,name:ai_agent.model_ai_quest_agent
+msgid "AI Quest AGent"
+msgstr "AI 任务代理"
 
 #. module: ai_agent
-#: model:ir.model.fields,help:ai_agent.field_ai_agent__ai_role
-msgid "The role or persona that the AI agent should adopt during interactions."
-msgstr "AI代理在交互过程中应采用的角色或人格。"
+#: model_terms:ir.ui.view,arch_db:ai_agent.ai_quest_form
+msgid "AI Quest Agents"
+msgstr "AI 任务代理列表"
 
 #. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_agent__image_128
+#: model:ir.actions.act_window,name:ai_agent.action_ai_quest_session
+msgid "AI Quest Session"
+msgstr "AI 任务会话"
+
+#. module: ai_agent
+#: model:ir.model,name:ai_agent.model_ai_quest_session_line
+msgid "AI Quest Session Line"
+msgstr "AI 任务会话行"
+
+#. module: ai_agent
+msgid "AI Quest Session Lines"
+msgstr "AI 任务会话行列表"
+
+#. module: ai_agent
+msgid "AI Quest Sessions"
+msgstr "AI 任务会话列表"
+
+#. module: ai_agent
+msgid "AI Quests"
+msgstr "AI 任务列表"
+
+#. module: ai_agent
+msgid "AI Session"
+msgstr "AI 会话"
+
+#. module: ai_agent
+msgid "AI Session Object"
+msgstr "AI 会话对象"
+
+#. module: ai_agent
+msgid "AI Session Objects"
+msgstr "AI 会话对象列表"
+
+#. module: ai_agent
+msgid "AI Sesson Object"
+msgstr "AI 会话对象"
+
+#. module: ai_agent
+msgid "AI Sweden's LLM AI Model License Agreement"
+msgstr "AI Sweden 的 LLM AI 模型许可协议"
+
+#. module: ai_agent
+msgid "AI polletts"
+msgstr "AI 令牌"
+
+#. module: ai_agent
+msgid "AI Type"
+msgstr "AI 类型"
+
+#. module: ai_agent
+msgid "API Type"
+msgstr "API 类型"
+
+#. module: ai_agent
+msgid "Accept Emails From"
+msgstr "接受来自以下地址的电子邮件"
+
+#. module: ai_agent
+msgid "Action Needed"
+msgstr "需要采取行动"
+
+#. module: ai_agent
+msgid "Active"
+msgstr "活跃"
+
+#. module: ai_agent
+msgid "Activities"
+msgstr "活动"
+
+#. module: ai_agent
+msgid "Activity Exception Decoration"
+msgstr "活动异常装饰"
+
+#. module: ai_agent
+msgid "Activity State"
+msgstr "活动状态"
+
+#. module: ai_agent
+msgid "Activity Type Icon"
+msgstr "活动类型图标"
+
+#. module: ai_agent
+msgid "Additional rate"
+msgstr "额外费率"
+
+#. module: ai_agent
+msgid "Agent"
+msgstr "代理"
+
+#. module: ai_agent
+msgid "Agent Count"
+msgstr "代理数量"
+
+#. module: ai_agent
+msgid "Agent LLM"
+msgstr "代理 LLM"
+
+#. module: ai_agent
+msgid "Agents"
+msgstr "代理列表"
+
+#. module: ai_agent
+msgid "Agents and Quests"
+msgstr "代理和任务"
+
+#. module: ai_agent
+msgid "Ai Agent"
+msgstr "AI 代理"
+
+#. module: ai_agent
+msgid "Ai Agent Count"
+msgstr "AI 代理数量"
+
+#. module: ai_agent
+msgid "Ai Agent Data"
+msgstr "AI 代理数据"
+
+#. module: ai_agent
+msgid "Ai Agent Data Type"
+msgstr "AI 代理数据类型"
+
+#. module: ai_agent
+msgid "Ai Agent Llm"
+msgstr "AI 代理 LLM"
+
+#. module: ai_agent
+msgid "Ai Api Key"
+msgstr "AI API 密钥"
+
+#. module: ai_agent
+msgid "Ai Discription"
+msgstr "AI 描述"
+
+#. module: ai_agent
+msgid "Ai Input"
+msgstr "AI 输入"
+
+#. module: ai_agent
+msgid "Ai Llm"
+msgstr "AI LLM"
+
+#. module: ai_agent
+msgid "Ai Llm Count"
+msgstr "AI LLM 数量"
+
+#. module: ai_agent
+msgid "Ai Prompt Template"
+msgstr "AI 提示模板"
+
+#. module: ai_agent
+msgid "Ai Quest"
+msgstr "AI 任务"
+
+#. module: ai_agent
+msgid "Ai Quest Session"
+msgstr "AI 任务会话"
+
+#. module: ai_agent
+msgid "Ai Quest Session Lines"
+msgstr "AI 任务会话行列表"
+
+#. module: ai_agent
+msgid "Ai Session"
+msgstr "AI 会话"
+
+#. module: ai_agent
+msgid "Ai Session Object"
+msgstr "AI 会话对象"
+
+#. module: ai_agent
+msgid "Ai Type"
+msgstr "AI 类型"
+
+#. module: ai_agent
+msgid "Alias"
+msgstr "别名"
+
+#. module: ai_agent
+msgid "Alias Contact Security"
+msgstr "别名联系人安全"
+
+#. module: ai_agent
+msgid "Alias Name"
+msgstr "别名名称"
+
+#. module: ai_agent
+msgid "Alias domain"
+msgstr "别名域名"
+
+#. module: ai_agent
+msgid "Aliased Model"
+msgstr "别名模型"
+
+#. module: ai_agent
+msgid "Anthropic"
+msgstr "人类学"
+
+#. module: ai_agent
+msgid "Apache 2.0 License"
+msgstr "Apache 2.0 许可证"
+
+#. module: ai_agent
+msgid "Api Type"
+msgstr "API 类型"
+
+#. module: ai_agent
+msgid "Attachment Count"
+msgstr "附件数量"
+
+#. module: ai_agent
+msgid "Attribute Value"
+msgstr "属性值"
+
+#. module: ai_agent
+msgid "Avatar"
+msgstr "头像"
+
+#. module: ai_agent
+msgid "Average Time"
+msgstr "平均时间"
+
+#. module: ai_agent
+msgid "Backstory"
+msgstr "背景故事"
+
+#. module: ai_agent
+msgid "BigCode Open RAIL-M v1 License Agreement"
+msgstr "BigCode Open RAIL-M v1 许可协议"
+
+#. module: ai_agent
+msgid "Bind this Quest to this model"
+msgstr "将此任务绑定到此模型"
+
+#. module: ai_agent
+msgid "Cancel"
+msgstr "取消"
+
+#. module: ai_agent
+msgid "Channel"
+msgstr "渠道"
+
+#. module: ai_agent
+msgid "Chat User"
+msgstr "聊天用户"
+
+#. module: ai_agent
+msgid "Chat with Channel"
+msgstr "与渠道聊天"
+
+#. module: ai_agent
+msgid "Chat with User"
+msgstr "与用户聊天"
+
+#. module: ai_agent
+msgid "Choose Large Language Model"
+msgstr "选择大型语言模型"
+
+#. module: ai_agent
+msgid "Code"
+msgstr "代码"
+
+#. module: ai_agent
+msgid "Color"
+msgstr "颜色"
+
+#. module: ai_agent
+msgid "Commercial License"
+msgstr "商业许可证"
+
+#. module: ai_agent
+msgid "Companies"
+msgstr "公司"
+
+#. module: ai_agent
+msgid "Configuration"
+msgstr "配置"
+
+#. module: ai_agent
+msgid "Configure a custom domain"
+msgstr "配置自定义域名"
+
+#. module: ai_agent
+msgid "Confirmed"
+msgstr "已确认"
+
+#. module: ai_agent
+msgid "Create Agents for Quest"
+msgstr "为任务创建代理"
+
+#. module: ai_agent
+msgid "Create LLM for each model"
+msgstr "为每个模型创建 LLM"
+
+#. module: ai_agent
+msgid "Created by"
+msgstr "创建者"
+
+#. module: ai_agent
+msgid "Created on"
+msgstr "创建日期"
+
+#. module: ai_agent
+msgid "Currency"
+msgstr "货币"
+
+#. module: ai_agent
+msgid "Custom Bounced Message"
+msgstr "自定义反弹消息"
+
+#. module: ai_agent
+msgid "Customer"
+msgstr "客户"
+
+#. module: ai_agent
+msgid "Data"
+msgstr "数据"
+
+#. module: ai_agent
+msgid "Data Type"
+msgstr "数据类型"
+
+#. module: ai_agent
+msgid "Data Uuid"
+msgstr "数据 UUID"
+
+#. module: ai_agent
+msgid "Database Name"
+msgstr "数据库名称"
+
+#. module: ai_agent
+msgid "Database UUID"
+msgstr "数据库 UUID"
+
+#. module: ai_agent
+msgid "Date"
+msgstr "日期"
+
+#. module: ai_agent
+msgid "Datetime"
+msgstr "日期时间"
+
+#. module: ai_agent
+msgid "Debug"
+msgstr "调试"
+
+#. module: ai_agent
+msgid "Default"
+msgstr "默认"
+
+#. module: ai_agent
+msgid "Default Values"
+msgstr "默认值"
+
+#. module: ai_agent
+msgid "Delete"
+msgstr "删除"
+
+#. module: ai_agent
+msgid "Description"
+msgstr "描述"
+
+#. module: ai_agent
+msgid "Discussion Channel"
+msgstr "讨论渠道"
+
+#. module: ai_agent
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: ai_agent
+msgid "Done"
+msgstr "已完成"
+
+#. module: ai_agent
+msgid "Draft"
+msgstr "草稿"
+
+#. module: ai_agent
+msgid "Dropdown menu"
+msgstr "下拉菜单"
+
+#. module: ai_agent
+msgid "Edit"
+msgstr "编辑"
+
+#. module: ai_agent
+msgid "EleutherAI/gpt-j-6B"
+msgstr "EleutherAI/gpt-j-6B"
+
+#. module: ai_agent
+msgid "Email Alias"
+msgstr "电子邮件别名"
+
+#. module: ai_agent
+msgid "End Date"
+msgstr "结束日期"
+
+#. module: ai_agent
+msgid "Enddate"
+msgstr "结束日期"
+
+#. module: ai_agent
+msgid "Endpoint"
+msgstr "端点"
+
+#. module: ai_agent
+msgid "Error"
+msgstr "错误"
+
+#. module: ai_agent
+msgid "Favorite"
+msgstr "收藏"
+
+#. module: ai_agent
+msgid "Filter Name"
+msgstr "过滤器名称"
+
+#. module: ai_agent
+msgid "Finish Reason"
+msgstr "完成原因"
+
+#. module: ai_agent
+msgid "Followers"
+msgstr "关注者"
+
+#. module: ai_agent
+msgid "Followers (Partners)"
+msgstr "关注者（合作伙伴）"
+
+#. module: ai_agent
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Font awesome 图标，例如 fa-tasks"
+
+#. module: ai_agent
+msgid "Gemma Terms of Use"
+msgstr "Gemma 使用条款"
+
+#. module: ai_agent
+msgid "Goal"
+msgstr "目标"
+
+#. module: ai_agent
+msgid "Google AI-terms"
+msgstr "Google AI 条款"
+
+#. module: ai_agent
+msgid "Google LLM"
+msgstr "Google LLM"
+
+#. module: ai_agent
+msgid "Google Vertex AI"
+msgstr "Google Vertex AI"
+
+#. module: ai_agent
+msgid "Groq"
+msgstr "Groq"
+
+#. module: ai_agent
+msgid "Group By"
+msgstr "按组"
+
+#. module: ai_agent
+msgid "Has Message"
+msgstr "有消息"
+
+#. module: ai_agent
+msgid "How the Quest is initialized"
+msgstr "任务的初始化方式"
+
+#. module: ai_agent
+msgid "HuggingFace"
+msgstr "HuggingFace"
+
+#. module: ai_agent
+msgid "ID"
+msgstr "ID"
+
+#. module: ai_agent
+msgid ""
+"ID of the parent record holding the alias (example: project holding the task "
+"creation alias)"
+msgstr ""
+"持有别名的父记录的 ID（例如：持有任务创建别名的项目）"
+
+#. module: ai_agent
+msgid "Icon"
+msgstr "图标"
+
+#. module: ai_agent
+msgid "Icon to indicate an exception activity."
+msgstr "用于指示异常活动的图标。"
+
+#. module: ai_agent
+msgid "If checked, new messages require your attention."
+msgstr "如果选中，新消息需要您的关注。"
+
+#. module: ai_agent
+msgid "If checked, some messages have a delivery error."
+msgstr "如果选中，某些消息有投递错误。"
+
+#. module: ai_agent
+msgid ""
+"If set, this content will automatically be sent out to unauthorized users instead "
+"of the default message."
+msgstr ""
+"如果设置，此内容将自动发送给未授权用户，而不是默认消息。"
+
+#. module: ai_agent
 msgid "Image"
-msgstr "图片"
+msgstr "图像"
 
 #. module: ai_agent
-#: model_terms:ir.ui.view,arch_db:ai_agent.ai_agent_form
-msgid "e.g. support"
-msgstr "例如：支持"
+msgid "Initiate"
+msgstr "启动"
 
 #. module: ai_agent
-#: model:ir.model,name:ai_agent.model_ai_agent_test_wizard
-msgid "AI Agent Test Wizard"
-msgstr "AI代理测试向导"
+msgid "Is Favorite"
+msgstr "是否收藏"
 
 #. module: ai_agent
-#: model:ir.model,name:ai_agent.model_ai_quest_test_mail_wizard
-msgid "AI Quest Test Mail Wizard"
-msgstr "AI任务邮件测试向导"
+msgid "Is Follower"
+msgstr "是否关注者"
 
 #. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_memory_test_wizard__ai_memory
-msgid "AI Memory"
-msgstr "AI记忆"
+msgid "Is Key Required"
+msgstr "是否需要密钥"
 
 #. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_memory_test_wizard__is_raise_error
-msgid "Raise Error"
-msgstr "引发错误"
+msgid "Is Llm"
+msgstr "是否为 LLM"
 
 #. module: ai_agent
-#: model:ir.module.category,name:ai_agent.module_category_ai_agent
-msgid "AI Agent"
-msgstr "AI代理"
+msgid "Is Rise Error"
+msgstr "是否上升错误"
 
 #. module: ai_agent
-#: model:ir.model.fields,field_description:ai_agent.field_ai_agent__tag_ids
+msgid "Json"
+msgstr "JSON"
+
+#. module: ai_agent
+msgid "Key Required"
+msgstr "需要密钥"
+
+#. module: ai_agent
+msgid "LLM"
+msgstr "LLM"
+
+#. module: ai_agent
+msgid "LLM Additional Rate"
+msgstr "LLM 额外费率"
+
+#. module: ai_agent
+msgid "LLM Calendar"
+msgstr "LLM 日历"
+
+#. module: ai_agent
+msgid "LLM Providors"
+msgstr "LLM 提供者"
+
+#. module: ai_agent
+msgid "LLM Type"
+msgstr "LLM 类型"
+
+#. module: ai_agent
+msgid "LLMs"
+msgstr "LLM 列表"
+
+#. module: ai_agent
+msgid "Last Modified on"
+msgstr "最后修改日期"
+
+#. module: ai_agent
+msgid "Last Run"
+msgstr "上次运行"
+
+#. module: ai_agent
+msgid "Last Updated by"
+msgstr "最后更新者"
+
+#. module: ai_agent
+msgid "Last Updated on"
+msgstr "最后更新日期"
+
+#. module: ai_agent
+msgid "Licence"
+msgstr "许可证"
+
+#. module: ai_agent
+msgid "Llama Community License"
+msgstr "Llama 社区许可证"
+
+#. module: ai_agent
+msgid "Llm Count"
+msgstr "LLM 数量"
+
+#. module: ai_agent
+msgid "Logs interesting data"
+msgstr "记录有趣的数据"
+
+#. module: ai_agent
+msgid "MIT License"
+msgstr "MIT 许可证"
+
+#. module: ai_agent
+msgid "Mail"
+msgstr "邮件"
+
+#. module: ai_agent
+msgid "Main Attachment"
+msgstr "主附件"
+
+#. module: ai_agent
+msgid "Manual"
+msgstr "手动"
+
+#. module: ai_agent
+msgid "Message"
+msgstr "消息"
+
+#. module: ai_agent
+msgid "Message Delivery error"
+msgstr "消息投递错误"
+
+#. module: ai_agent
+msgid "Messages"
+msgstr "消息列表"
+
+#. module: ai_agent
+msgid "Mistral AI"
+msgstr "Mistral AI"
+
+#. module: ai_agent
+msgid "Mistral Research License"
+msgstr "Mistral 研究许可证"
+
+#. module: ai_agent
+msgid "Model"
+msgstr "模型"
+
+#. module: ai_agent
+msgid "Model Real"
+msgstr "真实模型"
+
+#. module: ai_agent
+msgid "My Activity Deadline"
+msgstr "我的活动截止日期"
+
+#. module: ai_agent
+msgid "My Quests"
+msgstr "我的任务"
+
+#. module: ai_agent
+msgid "Name"
+msgstr "名称"
+
+#. module: ai_agent
+msgid "Name of langchain class, eg ChatOpenAI or ChatMistralAI"
+msgstr "langchain 类的名称，例如 ChatOpenAI 或 ChatMistralAI"
+
+#. module: ai_agent
+msgid "Next Activity Deadline"
+msgstr "下次活动截止日期"
+
+#. module: ai_agent
+msgid "Next Activity Summary"
+msgstr "下次活动摘要"
+
+#. module: ai_agent
+msgid "Next Activity Type"
+msgstr "下次活动类型"
+
+#. module: ai_agent
+msgid "Not Confirmed"
+msgstr "未确认"
+
+#. module: ai_agent
+msgid "Number of Actions"
+msgstr "操作数量"
+
+#. module: ai_agent
+msgid "Number of errors"
+msgstr "错误数量"
+
+#. module: ai_agent
+msgid "Number of messages requiring action"
+msgstr "需要操作的消息数量"
+
+#. module: ai_agent
+msgid "Number of messages with delivery error"
+msgstr "有投递错误的消息数量"
+
+#. module: ai_agent
+msgid "Object"
+msgstr "对象"
+
+#. module: ai_agent
+msgid "Objects"
+msgstr "对象列表"
+
+#. module: ai_agent
+msgid "Open-AI"
+msgstr "Open-AI"
+
+#. module: ai_agent
+msgid ""
+"Optional ID of a thread (record) to which all incoming messages will be attached, "
+"even if they did not reply to it. If set, this will disable the creation of new "
+"records completely."
+msgstr ""
+"可选的线程（记录）ID，所有 incoming 消息将被附加到该线程，即使它们没有回复它。如果设置，这将完全禁用新记录的创建。"
+
+#. module: ai_agent
+msgid "Our Mission"
+msgstr "我们的使命"
+
+#. module: ai_agent
+msgid "Our Values"
+msgstr "我们的价值观"
+
+#. module: ai_agent
+msgid "Owner"
+msgstr "所有者"
+
+#. module: ai_agent
+msgid "Parent Model"
+msgstr "父模型"
+
+#. module: ai_agent
+msgid "Parent Record Thread ID"
+msgstr "父记录线程 ID"
+
+#. module: ai_agent
+msgid ""
+"Parent model holding the alias. The model holding the alias reference is not "
+"necessarily the model given by alias_model_id (example: project (parent_model) "
+"and task (model))"
+msgstr ""
+"持有别名的父模型。持有别名引用的模型不一定是 alias_model_id 给出的模型（例如：项目（父模型）和任务（模型））"
+
+#. module: ai_agent
+msgid "Partner"
+msgstr "合作伙伴"
+
+#. module: ai_agent
+msgid ""
+"Policy to post a message on the document using the mailgateway.\n"
+"- everyone: everyone can post\n"
+"- partners: only authenticated partners\n"
+"- followers: only followers of the related document or members of following "
+"channels\n"
+msgstr ""
+"使用邮件网关在文档上发布消息的策略。\n"
+"- 所有人：任何人都可以发布\n"
+"- 合作伙伴：只有经过身份验证的合作伙伴\n"
+"- 关注者：只有相关文档的关注者或关注渠道的成员\n"
+
+#. module: ai_agent
+msgid "Product"
+msgstr "产品"
+
+#. module: ai_agent
+msgid "Product Tmpl"
+msgstr "产品模板"
+
+#. module: ai_agent
+msgid "Provider"
+msgstr "提供者"
+
+#. module: ai_agent
+msgid "Providers"
+msgstr "提供者列表"
+
+#. module: ai_agent
+msgid "Python Code"
+msgstr "Python 代码"
+
+#. module: ai_agent
+msgid "Quest"
+msgstr "任务"
+
+#. module: ai_agent
+msgid "Quest Count"
+msgstr "任务数量"
+
+#. module: ai_agent
+msgid "Quests"
+msgstr "任务列表"
+
+#. module: ai_agent
+msgid "Record Thread ID"
+msgstr "记录线程 ID"
+
+#. module: ai_agent
+msgid "Responsible User"
+msgstr "负责人"
+
+#. module: ai_agent
+msgid "Role"
+msgstr "角色"
+
+#. module: ai_agent
+msgid "Run"
+msgstr "运行"
+
+#. module: ai_agent
+msgid "Scheduled Action"
+msgstr "计划操作"
+
+#. module: ai_agent
+msgid "Search AI Agent LLM"
+msgstr "搜索 AI 代理 LLM"
+
+#. module: ai_agent
+msgid "Search AI Agents"
+msgstr "搜索 AI 代理"
+
+#. module: ai_agent
+msgid "Search AI Quest Session Lines"
+msgstr "搜索 AI 任务会话行"
+
+#. module: ai_agent
+msgid "Search AI Quest Sessions"
+msgstr "搜索 AI 任务会话"
+
+#. module: ai_agent
+msgid "Search AI Quests"
+msgstr "搜索 AI 任务"
+
+#. module: ai_agent
+msgid "Search AI Sessions Object"
+msgstr "搜索 AI 会话对象"
+
+#. module: ai_agent
+msgid "Sequence"
+msgstr "序列"
+
+#. module: ai_agent
+msgid "Server Action"
+msgstr "服务器操作"
+
+#. module: ai_agent
+msgid "Server action to be executed when this quest is initialized"
+msgstr "当此任务初始化时要执行的服务器操作"
+
+#. module: ai_agent
+msgid "Session"
+msgstr "会话"
+
+#. module: ai_agent
+msgid "Session Count"
+msgstr "会话数量"
+
+#. module: ai_agent
+msgid "Session ID"
+msgstr "会话 ID"
+
+#. module: ai_agent
+msgid "Session Line"
+msgstr "会话行"
+
+#. module: ai_agent
+msgid "Session Line Count"
+msgstr "会话行数量"
+
+#. module: ai_agent
+msgid "Session Object"
+msgstr "会话对象"
+
+#. module: ai_agent
+msgid "Session Object Count"
+msgstr "会话对象数量"
+
+#. module: ai_agent
+msgid "Session Objects"
+msgstr "会话对象列表"
+
+#. module: ai_agent
+msgid "Sessions"
+msgstr "会话列表"
+
+#. module: ai_agent
+msgid "Start"
+msgstr "开始"
+
+#. module: ai_agent
+msgid "Start Date"
+msgstr "开始日期"
+
+#. module: ai_agent
+msgid "Startdate"
+msgstr "开始日期"
+
+#. module: ai_agent
+msgid "Status"
+msgstr "状态"
+
+#. module: ai_agent
+msgid "Status Color"
+msgstr "状态颜色"
+
+#. module: ai_agent
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"基于活动的状态\n"
+"逾期：到期日已过\n"
+"今天：活动日期是今天\n"
+"计划中：未来活动。"
+
+#. module: ai_agent
+msgid "System Fingerprint"
+msgstr "系统指纹"
+
+#. module: ai_agent
+msgid "System polletts"
+msgstr "系统令牌"
+
+#. module: ai_agent
 msgid "Tags"
 msgstr "标签"
+
+#. module: ai_agent
+msgid ""
+"Temperature controls the randomness and creativity of the model's output, <1.0 "
+"more predictable and consistant >1.0 more diverse and creative responses"
+msgstr ""
+"温度控制模型输出的随机性和创造性，<1.0 更可预测和一致，>1.0 更多样化和创造性响应"
+
+#. module: ai_agent
+msgid "Template"
+msgstr "模板"
+
+#. module: ai_agent
+msgid "Test"
+msgstr "测试"
+
+#. module: ai_agent
+msgid "Test AI"
+msgstr "测试 AI"
+
+#. module: ai_agent
+msgid "Test Mail"
+msgstr "测试邮件"
+
+#. module: ai_agent
+msgid ""
+"The email address associated with this channel. New emails received will "
+"automatically create new leads assigned to the channel."
+msgstr ""
+"与此渠道关联的电子邮件地址。收到的新电子邮件将自动创建分配给该渠道的新线索。"
+
+#. module: ai_agent
+msgid ""
+"The model (Odoo Document Kind) to which this alias corresponds. Any incoming "
+"email that does not reply to an existing record will cause the creation of a new "
+"record of this model (e.g. a Project Task)"
+msgstr ""
+"此别名对应的模型（Odoo 文档类型）。任何未回复现有记录的 incoming 电子邮件将导致创建此模型的新记录（例如，项目任务）"
+
+#. module: ai_agent
+msgid ""
+"The name of the email alias, e.g. 'jobs' if you want to catch emails for "
+"<jobs@example.odoo.com>"
+msgstr ""
+"电子邮件别名的名称，例如 'jobs'，如果您想捕获 <jobs@example.odoo.com> 的电子邮件"
+
+#. module: ai_agent
+msgid ""
+"The owner of records created upon receiving emails on this alias. If this field "
+"is not set the system will attempt to find the right owner based on the sender "
+"(From) address, or will use the Administrator account if no system user is found "
+"for that address."
+msgstr ""
+"在此别名上接收电子邮件时创建的记录的所有者。如果未设置此字段，系统将尝试根据发件人（From）地址找到合适的
