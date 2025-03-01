@@ -6,6 +6,9 @@ class ProductTemplate(models.Model):
 
     ai_api_key = fields.Char()
     fallback_api_key_name = fields.Char()
+    # 添加提供商层面的API基础URL字段
+    api_base_url = fields.Char(string="API Base URL", 
+                              help="提供商级别的API基础URL配置，如果为空则使用默认值")
     ai_session_lines_ids = fields.One2many(comodel_name='ai.quest.session.line', inverse_name='product_tmpl_id',
                                            string="AI Tokens", help="")
     is_llm = fields.Boolean()
@@ -33,6 +36,7 @@ class ProductTemplate(models.Model):
             for model in attrs_value:
                 self.env['ai.agent.llm'].create({
                     'ai_api_key': p.ai_api_key,
+                    'api_base_url': p.api_base_url,  # 传递API基础URL
                     'model_id': model.id,
                     'product_tmpl_id': p.id,
                     'name': f"{p.name}-{model.name}",

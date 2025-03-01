@@ -9,6 +9,7 @@ from langchain_core.messages import AIMessage, HumanMessage, ChatMessage, System
 _logger = logging.getLogger(__name__)
 
 
+# 修改 AISessionObject 模型中的字段标签
 class AISessionObject(models.Model):
     _name = 'ai.session.object'
     _description = 'AI Session Object'
@@ -24,12 +25,12 @@ class AISessionObject(models.Model):
     ai_quest_id = fields.Many2one(comodel_name='ai.quest', related="ai_session_id.ai_quest_id", store=True)
     ai_session_id = fields.Many2one(comodel_name='ai.quest.session', string="", help="")
     model_id = fields.Many2one(comodel_name='ir.model', compute=_get_model, store=True)
-    object_id = fields.Reference(string='Object',
+    object_id = fields.Reference(string='Referenced Object',  # 修改标签，更具描述性
                                  selection=lambda m: [(model.model, model.name) for model in
                                                       m.env['ir.model'].sudo().search([])],
                                  readonly=False, required=True)
 
-    display_name = fields.Char(string="Object", compute='_compute_display_name')
+    display_name = fields.Char(string="Object Display Name", compute='_compute_display_name')  # 修改标签
     color = fields.Integer(related="ai_session_id.ai_quest_id.color")
 
     @api.depends('object_id')
@@ -51,10 +52,10 @@ class AIQuestSession(models.Model):
     session = fields.Char(default=lambda self: str(uuid.uuid4()))
     name = fields.Char(default=lambda self: self.session)
     ai_agent_count = fields.Integer(compute='_compute_ai_agent_count')
-    ai_agent_id = fields.Many2one(comodel_name="ai.agent")
-    ai_agent_ids = fields.Many2many(comodel_name="ai.agent")
-    ai_agent_llm_id = fields.Many2one(comodel_name="ai.agent.llm")
-    ai_agent_llm_ids = fields.Many2many(comodel_name="ai.agent.llm")
+    ai_agent_id = fields.Many2one(comodel_name="ai.agent", string="Primary Agent")  # 修改标签
+    ai_agent_ids = fields.Many2many(comodel_name="ai.agent", string="Agent List")  # 修改标签
+    ai_agent_llm_id = fields.Many2one(comodel_name="ai.agent.llm", string="Primary LLM Agent")  # 修改标签
+    ai_agent_llm_ids = fields.Many2many(comodel_name="ai.agent.llm", string="LLM Agent List")  # 修改标签
     ai_llm_count = fields.Integer(compute='_compute_ai_llm_count')
     ai_memory_id = fields.Many2one(comodel_name="ai.memory")
     ai_quest_id = fields.Many2one(comodel_name="ai.quest")

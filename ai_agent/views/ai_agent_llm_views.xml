@@ -1,5 +1,6 @@
 <odoo>
     <data>
+        <!-- 在列表视图中添加api_base_url字段 -->
         <record id="view_ai_agent_llm_tree" model="ir.ui.view">
             <field name="name">ai.agent.llm.tree</field>
             <field name="model">ai.agent.llm</field>
@@ -13,6 +14,7 @@
                     <field name="licence" />
                     <field name="is_embedded" />
                     <field name="endpoint" optional="hide" />
+                    <field name="api_base_url" optional="hide" />
                     <field name="is_key_required" />
                     <field name="last_run" />
                     <field name="ai_agent_count" optional="hide" />
@@ -28,13 +30,15 @@
                 </list>
             </field>
         </record>
-
+        
+        <!-- 在搜索视图中添加api_base_url字段 -->
         <record id="ai_agent_llm_search" model="ir.ui.view">
             <field name="name">ai.agent.llm.search</field>
             <field name="model">ai.agent.llm</field>
             <field name="arch" type="xml">
                 <search string="Search AI Agent LLM">
                     <field name="endpoint" />
+                    <field name="api_base_url" />
                     <field name="is_embedded" />
                     <field name="last_run" />
                     <field name="llm_etype" />
@@ -58,7 +62,8 @@
                 </search>
             </field>
         </record>
-
+        
+        <!-- 在表单视图中添加api_base_url字段 -->
         <record id="ai_agent_llm_form" model="ir.ui.view">
             <field name="name">ai.agent.llm.form</field>
             <field name="model">ai.agent.llm</field>
@@ -66,6 +71,9 @@
                 <form>
                     <header>
                         <button name="test_llm" type="object" string="Test" />
+                        <button name="update_api_key" type="object" string="更新API密钥" groups="base.group_system"/>
+                        <button name="update_api_base_url" type="object" string="更新API基础URL" groups="base.group_system"/>
+                        <button name="update_api_settings" type="object" string="更新所有API设置" groups="base.group_system"/>
                         <field name="status" widget="statusbar" statusbar_visible="not_confirmed,confirmed" options="{'clickable': '1', 'fold_field': 'fold'}" />
                     </header>
                     <sheet>
@@ -104,6 +112,7 @@
                                 <field name="model_id" invisible="product_tmpl_id == False" domain="[('product_tmpl_id', '=', product_tmpl_id),('attribute_id','=', %(ai_agent.product_attribute_model)d)]" />
                                 <field name="azure_endpoint" required="llm_type == 'AzureChatOpenAI'" invisible="llm_type != 'AzureChatOpenAI'"/>
                                 <field name="api_version" required="llm_type == 'AzureChatOpenAI'" invisible="llm_type != 'AzureChatOpenAI'"/>
+                                <field name="api_base_url" placeholder="例如: https://api.example.com/v1"/>
                             </group>
                         </group>
                         <group>
@@ -131,7 +140,7 @@
                     <field name="is_embedded" />
                     <field name="licence" />
                     <templates>
-                        <t t-name="kanban-box">
+                        <t t-name="card">
                             <div t-attf-class="oe_kanban_card oe_kanban_global_click #{kanban_color(record.color.raw_value)}">
                                 <div class="o_kanban_image me-1">
                                     <img t-att-src="kanban_image('ai.agent.llm', 'image_128', record.id.raw_value)" alt="LLM Agents" class="o_image_64_contain"/>

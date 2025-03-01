@@ -38,6 +38,10 @@ class AIAgentLLM(models.Model):
     ai_api_key = fields.Char(default=lambda self: self.product_tmpl_id.ai_api_key)
     color = fields.Integer(default=lambda self: randint(1, 11))
     endpoint = fields.Char()
+    # 修改API基础URL字段，添加默认值
+    api_base_url = fields.Char(string="API Base URL", 
+                              default=lambda self: self.product_tmpl_id.api_base_url,
+                              help="自定义API基础URL，如果为空则使用默认值")
     image_128 = fields.Image("Image", max_width=128, max_height=128, related="product_tmpl_id.image_128")
     is_embedded = fields.Boolean(related='model_id.product_attribute_value_id.is_embedded')
     is_favorite = fields.Boolean()
@@ -143,6 +147,19 @@ class AIAgentLLM(models.Model):
             if self.product_tmpl_id.llm_type == "AzureChatOpenAI":
                kwarg['api_version'] = self.api_version
                kwarg['azure_endpoint'] = self.azure_endpoint
+            # 添加对通用API基础URL的支持
+            elif self.api_base_url:
+               # 根据不同的LLM库使用不同的参数名
+               if self.product_tmpl_id.llm_library == 'langchain_openai':
+                   kwarg['openai_api_base'] = self.api_base_url
+               elif self.product_tmpl_id.llm_library == 'langchain_anthropic':
+                   kwarg['anthropic_api_url'] = self.api_base_url
+               elif self.product_tmpl_id.llm_library == 'langchain_groq':
+                   kwarg['groq_api_base'] = self.api_base_url
+               # 对于其他库，使用通用的base_url参数
+               else:
+                   kwarg['base_url'] = self.api_base_url
+                   
             api_key = self.ai_api_key
             if not api_key:
                 api_key = tools.config.get(self.product_tmpl_id.fallback_api_key_name, False)
@@ -264,5 +281,16 @@ class AIAgentLLM(models.Model):
     def update_api_key(self):
         for llm in self:
             llm.ai_api_key = llm.product_tmpl_id.ai_api_key
+
+    # 添加更新API基础URL的方法
+    def update_api_base_url(self):
+        for llm in self:
+            llm.api_base_url = llm.product_tmpl_id.api_base_url
+            
+    # 添加同时更新API密钥和基础URL的方法
+    def update_api_settings(self):
+        for llm in self:
+            llm.ai_api_key = llm.product_tmpl_id.ai_api_key
+            llm.api_base_url = llm.product_tmpl_id.api_base_url
 
 
