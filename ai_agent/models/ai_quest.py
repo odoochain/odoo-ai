@@ -113,8 +113,7 @@ class AIQuestAgent(models.Model):
     ai_quest_id = fields.Many2one(comodel_name='ai.quest', string="", help="")
     ai_agent_id = fields.Many2one(
         comodel_name='ai.agent', string="Agent", help="", required=False)
-    ai_agent_status = fields.Selection(selection=[
-        ("draft", "Draft"), ("active", "Active"), ("done", "Done"), ("error", "Error")], default="draft", related='ai_agent_id.status')
+    ai_agent_status = fields.Selection(default="draft", related='ai_agent_id.status')
     ai_agent_llm_id = fields.Many2one(comodel_name="ai.agent.llm", string="LLM", help="Choose Large Language Model",
                                       domain="[('status','=','confirmed')]", related='ai_agent_id.ai_agent_llm_id')
     ai_llm_status = fields.Selection(
@@ -549,8 +548,8 @@ class AIQuest(models.Model):
         if len(self.ai_agent_ids.filtered(
                 lambda a: a.ai_agent_id.ai_agent_llm_id.is_key_required and not a.ai_agent_id.ai_agent_llm_id.ai_api_key
         )) > 0:
-            pass
-            # return _('Missing API Key on LLMs')
+            # pass
+            return _('Missing API Key on LLMs')  # 取消注释，启用API密钥检查
         # if self.status != 'active':
         #     return _('Wrong status on the quest')
         if self.code == DEFAULT_PYTHON_CODE:

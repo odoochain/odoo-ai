@@ -139,11 +139,13 @@
                     <field name="ai_agent_ids" />
                     <field name="is_embedded" />
                     <field name="licence" />
+                    <field name="image_128" />
                     <templates>
                         <t t-name="card">
-                            <div t-attf-class="oe_kanban_card oe_kanban_global_click #{kanban_color(record.color.raw_value)}">
-                                <div class="o_kanban_image me-1">
-                                    <img t-att-src="kanban_image('ai.agent.llm', 'image_128', record.id.raw_value)" alt="LLM Agents" class="o_image_64_contain"/>
+                            <div t-attf-class="oe_kanban_global_click o_kanban_record o_kanban_color_#{record.color.raw_value}">
+                                <!-- 使用简单的图像显示方式 -->
+                                <div class="o_kanban_image_fill">
+                                    <field name="image_128" widget="image" class="o_image_64_contain"/>
                                 </div>
                                 <div class="oe_kanban_details">
                                     <div class="o_kanban_record_top mb-0">
@@ -168,12 +170,12 @@
                                     <div class="oe_kanban_footer mt-3">
                                         <div class="o_kanban_record_bottom">
                                             <div class="oe_kanban_bottom_left">
-                                                <t t-if="record.last_run.value != False">
+                                                <t t-if="record.last_run.value !== false">
                                                     <span class="fa fa-clock-o me-2" title="Dates" />
                                                     <field name="last_run" />
                                                 </t>
 
-                                                <t t-if="record.ai_agent_count.value != 0">
+                                                <t t-if="record.ai_agent_count.value !== 0">
                                                     <div class="o_project_kanban_boxes d-flex align-items-baseline">
                                                         <a class="o_project_kanban_box" name="action_get_agents" type="object">
                                                             <div>
