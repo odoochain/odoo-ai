@@ -25,7 +25,7 @@
     'name': "odoo-ai: AI Agent",
     'version': "1.0",
     'summary': "AI Agent orchestration",
-    'category': "Productivity",
+    'category': "AI Orchestration",
     'description': """
         
         
@@ -87,8 +87,9 @@ AI代理是一种软件系统，它使用人工智能技术来解释信息、做
     'website': "https://vertel.se/apps/odoo-ai/ai_agent",
     'images': ["static/description/banner.png"],  # 560x280
     "license": "AGPL-3",
-    "depends": ["mail", "product", "crm"],
+    "depends": ["mail", "product", "crm", "queue_job"],
     "data": [
+        "security/ai_agent_security.xml",
         "security/ir.model.access.csv",
         "data/server_action.xml",
         "data/data.xml",
@@ -102,6 +103,7 @@ AI代理是一种软件系统，它使用人工智能技术来解释信息、做
         "data/huggingface_data.xml",
         "data/ai_agent_data.xml",
         "data/ai_tool_data.xml",
+        "data/ollama_data.xml",
         "demo/ai_agent_demo.xml",
         "wizard/ai_agent_test_wizard_views.xml",
         "wizard/ai_quest_test_mail_wizard_views.xml",
@@ -118,7 +120,8 @@ AI代理是一种软件系统，它使用人工智能技术来解释信息、做
         "views/res_company_views.xml",
         "views/res_users_views.xml",
         "views/mail_channel_views.xml",
-        "views/res_config_settings_views.xml"
+        "views/res_config_settings_views.xml",
+        "security/ai_quest_record_rule.xml",
     ],
     "external_dependencies": {
         "python": [

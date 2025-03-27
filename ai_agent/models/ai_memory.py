@@ -8,6 +8,7 @@ import faiss
 import asyncio
 import requests
 import markdownify
+import math
 from bs4 import BeautifulSoup
 from dateutil.relativedelta import relativedelta
 from langchain_community.document_loaders import PyPDFLoader
@@ -20,7 +21,7 @@ from random import randint
 from urllib.parse import urljoin, urlparse
 from odoo import models, fields, api, _
 from odoo.tools.safe_eval import safe_eval
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from langchain_huggingface import HuggingFaceEmbeddings
 
 _logger = logging.getLogger(__name__)
@@ -87,12 +88,12 @@ class AIMemory(models.Model):
     color = fields.Integer(default=lambda self: randint(1, 11))
     debug = fields.Boolean(string='Debug')
     field_list = fields.Text(string='Field List', default="['name']", readonly=False)
-    filter_domain = fields.Char(string='Record selection', )
+    filter_domain = fields.Char(string='Record selection')
     image_128 = fields.Image("Image", max_width=128, max_height=128)
     is_favorite = fields.Boolean()
     last_run = fields.Datetime()
     max_nbr_pages = fields.Integer(string="Max Number of Pages")
-    memory_faiss = fields.Binary(string='FAISS Index', attachment=True)
+    memory_faiss = fields.Binary(string='FAISS Index', attachment=True, copy=False)
     memory_markdown = fields.Binary(string='Markdown', attachment=True)
     memory_type = fields.Selection(
         selection=[("bs4", "Simple Webscraper"), ("model", "Model"), ("local_attachment", "Local Attachment"),
@@ -116,6 +117,18 @@ class AIMemory(models.Model):
     url = fields.Char(string='Url', trim=True, )
     vector_type = fields.Selection(selection=[('faiss', 'FAISS'), ('st', 'Short Term')], string='Vector type',
                                    help="The type of vector database")
+    record_limit = fields.Integer(string="Record Limit", default=1)
+
+    @api.constrains('record_limit')
+    def _check_record_limit(self):
+        for record in self:
+            domain = safe_eval(record.filter_domain) if record.filter_domain else []
+            domain_count = self.env[record.model_name].search_count(domain)
+            if record.record_limit < 1:
+                raise ValidationError(_("The record limit can't be less than one."))
+            if record.record_limit > domain_count:
+                raise ValidationError(_("The record limit can't be bigger than the amount of records."))
+
 
     def action_get_quests(self):
         action = {
@@ -236,6 +249,9 @@ class AIMemory(models.Model):
         return action
 
     def run(self):
+        self.with_delay().real_run()
+
+    def real_run(self):
         for memory in self:
             if memory.status != "active":
                 raise UserError(_(f"Wrong state on memory ({self.name})"))
@@ -254,6 +270,8 @@ class AIMemory(models.Model):
                 module_dicts = memory.env[memory.model_name].search(domain).read(model_fields)
                 _logger.error(f"{module_dicts=}")
                 raw_documents = []
+                is_first = True
+                runs = 0
                 for module_dict in module_dicts:
                     for key, item in module_dict.items():
                         if isinstance(item, fields.datetime):
@@ -262,7 +280,13 @@ class AIMemory(models.Model):
                             module_dict[key] = base64.b64encode(item).decode("utf-8")
                     raw_documents.append(memory.create_document(text=json.dumps(module_dict), metadata=module_dict))
                 if len(raw_documents) != 0:
-                    self.create_vector(raw_documents)
+                    runs = math.ceil(len(raw_documents) / memory.record_limit)
+                    for run in range(runs):
+                        if is_first:
+                            self.create_vector(raw_documents[run*memory.record_limit:(run + 1)*memory.record_limit])
+                            is_first = False
+                        elif self.memory_faiss:
+                            self.add_to_vector(raw_documents[run*memory.record_limit:(run + 1)*memory.record_limit])
             elif memory.memory_type == 'attachments':
                 memory.rag_attatchemts()
             elif memory.memory_type == 'local_attachment':
@@ -305,6 +329,13 @@ class AIMemory(models.Model):
             self.test_embedd(embeddings)
             db = FAISS.from_documents(documents, embeddings)
             self.memory_faiss = base64.b64encode(db.serialize_to_bytes())
+
+    def add_to_vector(self,raw_documents):
+        documents = self.text_splitter(raw_documents)
+        db = self.load_faiss()
+        uuids = [str(uuid.uuid4()) for _ in range(len(documents))]
+        db.add_documents(documents=documents, ids=uuids)
+        self.memory_faiss = base64.b64encode(db.serialize_to_bytes())
 
     def test_embedd(self, embeddings):
         try:
