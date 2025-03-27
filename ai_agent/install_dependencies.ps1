@@ -552,13 +552,22 @@ if __name__ == "__main__":
 
 # 安装OpenAI和langchain相关包
 Install-Dependencies "正在安装OpenAI和langchain相关包..." {
-    # 使用micromamba安装langchain相关包
-    Write-Host "正在使用micromamba安装langchain和OpenAI相关包..." -ForegroundColor Cyan
-    micromamba install -c conda-forge langchain-community==0.2.16 langchain-groq langchain-mistralai langchain-openai==0.1.25 openai -y
+    # 使用micromamba安装langchain和OpenAI相关包
+    Write-Host "正在使用micromamba安装langchain-openai和OpenAI..." -ForegroundColor Cyan
+    # 修改为单独安装langchain-openai和openai，确保版本正确
+    micromamba install -c conda-forge langchain-openai=0.1.25 openai -y
+    
+    # 安装其他langchain相关包
+    Write-Host "正在安装其他langchain相关包..." -ForegroundColor Cyan
+    micromamba install -c conda-forge langchain-community==0.2.16 langchain-groq langchain-mistralai -y
     
     # 安装其他可能需要的包
     Write-Host "安装其他AI相关依赖..." -ForegroundColor Cyan
     micromamba install -c conda-forge langgraph -y
+    
+    # 验证OpenAI包安装
+    Write-Host "验证OpenAI包安装..." -ForegroundColor Cyan
+    python -c "import openai; import langchain_openai; print('OpenAI版本:', openai.__version__); print('langchain-openai版本:', langchain_openai.__version__)" || Write-Host "OpenAI包验证失败，但安装可能已完成" -ForegroundColor Yellow
     
     # 尝试安装可能缺失的包
     Write-Host "尝试安装其他可能需要的包..." -ForegroundColor Yellow

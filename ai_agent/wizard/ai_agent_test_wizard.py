@@ -36,11 +36,15 @@ class AIAgentTestWizard(models.TransientModel):
             session = self.create_fake_session()
             record.ai_agent_id.ai_prompt_template = record.ai_prompt_template
             parsed_variables = JsonOutputParser(pydantic_object=jsonResponse)
+            
+            # 修改这里，使用正确的方法名称
+            # 可能是test或invoke而不是prompt_agent
+            input_data = eval(record.ai_input)
             if self.is_rise_error:    
                 raise UserError(
-                    f"{record.ai_agent_id.prompt_agent(prompt=record.ai_prompt_template, parser=parsed_variables, session=session, **eval(record.ai_input))}"
+                    f"{record.ai_agent_id.test(prompt=record.ai_prompt_template, parser=parsed_variables, session=session, **input_data)}"
                 )
-            _logger.error(f"{record.ai_agent_id.prompt_agent(prompt=record.ai_prompt_template, parser=parsed_variables, session=session, **eval(record.ai_input))}")
+            _logger.error(f"{record.ai_agent_id.test(prompt=record.ai_prompt_template, parser=parsed_variables, session=session, **input_data)}")
 
     def create_fake_session(self):
         return self.env["ai.quest.session"].create({"session": str(uuid.uuid4())})

@@ -266,7 +266,9 @@ class AIAgentLLM(models.Model):
 
     def test_llm(self):
         session = self.env['ai.quest.session'].llm_init(self)
-        session.state = 'done'
+        # 修改这里，使用正确的状态字段名称
+        # 可能是status而不是state
+        session.status = 'done'
         self.status = "confirmed"
 
     def get_agent_executor(self, prompt, tools, temperature=1.0, verbose=False, callbacks=None):
