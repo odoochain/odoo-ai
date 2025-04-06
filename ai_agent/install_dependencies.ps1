@@ -210,7 +210,7 @@ try {
     
     # 尝试直接加载hook
     try {
-        iex (micromamba shell hook --shell powershell | Out-String)
+        Invoke-Expression (micromamba shell hook --shell powershell | Out-String)
     } catch {
         Write-Host "直接加载hook失败，尝试其他方式..." -ForegroundColor Yellow
     }
@@ -261,26 +261,26 @@ if (-not $hookFound) {
 
 # 检查环境是否已存在
 Write-Host "检查环境是否已存在..." -ForegroundColor Cyan
-$envExists = micromamba env list | Select-String "odoo-ai-env"
+$envExists = micromamba env list | Select-String "odoo"
 
 if ($envExists) {
-    Write-Host "环境 odoo-ai-env 已存在" -ForegroundColor Yellow
+    Write-Host "环境 odoo 已存在" -ForegroundColor Yellow
     $choice = Read-Host "是否要更新现有环境? (Y/N)"
     
     if ($choice -eq "Y" -or $choice -eq "y") {
         Write-Host "将更新现有环境..." -ForegroundColor Cyan
-        $ENV_NAME = "odoo-ai-env"
+        $ENV_NAME = "odoo"
     } else {
-        $NEW_ENV_NAME = Read-Host "请输入新环境名称 (默认: odoo-ai-env-new)"
+        $NEW_ENV_NAME = Read-Host "请输入新环境名称 (默认: odoo-new)"
         if ([string]::IsNullOrEmpty($NEW_ENV_NAME)) {
-            $NEW_ENV_NAME = "odoo-ai-env-new"
+            $NEW_ENV_NAME = "odoo-new"
         }
         Write-Host "将创建新环境: $NEW_ENV_NAME" -ForegroundColor Cyan
         $ENV_NAME = $NEW_ENV_NAME
     }
 } else {
     Write-Host "环境不存在，将创建新环境..." -ForegroundColor Cyan
-    $ENV_NAME = "odoo-ai-env"
+    $ENV_NAME = "odoo"
 }
 
 # 创建新环境
