@@ -1,7 +1,7 @@
 import json
 import logging
 import io
-import pymupdf
+import fitz
 import base64
 import uuid
 import faiss
@@ -75,7 +75,8 @@ class AIquestMemory(models.Model):
 
 class AIMemory(models.Model):
     _name = 'ai.memory'
-    _inherit = ["mail.thread", "mail.activity.mixin", ]
+    _inherit = ["mail.thread", "mail.activity.mixin"]
+    #_inherit = ["mail.thread", "mail.activity.mixin", "llm.embedding.mixin"]
     _description = 'AI Memory'
 
     ai_agent_count = fields.Integer(compute="compute_ai_agent_count")
@@ -119,15 +120,17 @@ class AIMemory(models.Model):
                                    help="The type of vector database")
     record_limit = fields.Integer(string="Record Limit", default=1)
 
+
     @api.constrains('record_limit')
     def _check_record_limit(self):
         for record in self:
-            domain = safe_eval(record.filter_domain) if record.filter_domain else []
-            domain_count = self.env[record.model_name].search_count(domain)
-            if record.record_limit < 1:
-                raise ValidationError(_("The record limit can't be less than one."))
-            if record.record_limit > domain_count:
-                raise ValidationError(_("The record limit can't be bigger than the amount of records."))
+            if record.memory_type == "model":
+                domain = safe_eval(record.filter_domain) if record.filter_domain else []
+                domain_count = self.env[record.model_name].search_count(domain)
+                if record.record_limit < 1:
+                    raise ValidationError(_("The record limit can't be less than one."))
+                if record.record_limit > domain_count:
+                    raise ValidationError(_("The record limit can't be bigger than the amount of records."))
 
 
     def action_get_quests(self):
@@ -222,7 +225,7 @@ class AIMemory(models.Model):
                              self.env["ir.attachment"].search(
                                  [("res_model", "=", memory._name), ("res_id", "=", memory.id)])]
             if raw_documents:
-                self.create_vector(raw_documents)
+                self.create_vector(raw_documents,memory=memory)
             else:
                 raise UserError(_("No attachments to RAG"))
 
@@ -233,7 +236,7 @@ class AIMemory(models.Model):
                              self.env["ir.attachment"].search(
                                  [("res_model", "=", memory._name), ("res_id", "=", memory.id)])]
             if raw_documents:
-                self.create_vector(raw_documents)
+                self.create_vector(raw_documents,memory=memory)
             else:
                 raise UserError(_("No attachments to RAG"))
 
@@ -249,7 +252,8 @@ class AIMemory(models.Model):
         return action
 
     def run(self):
-        self.with_delay().real_run()
+        self.real_run()
+        #self.with_delay().real_run()
 
     def real_run(self):
         for memory in self:
@@ -258,35 +262,9 @@ class AIMemory(models.Model):
 
             memory.last_run = fields.Datetime.now()
             if memory.memory_type == 'bs4':
-                if not memory.url:
-                    raise UserError(_(f"Missing url on memory ({self.name})"))
-                all_pages = self.scrape_website(memory.url, memory.max_nbr_pages)
-                memory.memory_markdown = base64.b64encode(all_pages)
-                raw_documents = [memory.create_document(text=all_pages, metadata={})]
-                memory.create_vector(raw_documents)
+                memory.setup_db_for_bs4(memory)
             elif memory.memory_type == 'model':
-                model_fields = eval(memory.field_list)
-                domain = safe_eval(memory.filter_domain) if memory.filter_domain else []
-                module_dicts = memory.env[memory.model_name].search(domain).read(model_fields)
-                _logger.error(f"{module_dicts=}")
-                raw_documents = []
-                is_first = True
-                runs = 0
-                for module_dict in module_dicts:
-                    for key, item in module_dict.items():
-                        if isinstance(item, fields.datetime):
-                            module_dict[key] = item.isoformat()
-                        if isinstance(item, bytes):
-                            module_dict[key] = base64.b64encode(item).decode("utf-8")
-                    raw_documents.append(memory.create_document(text=json.dumps(module_dict), metadata=module_dict))
-                if len(raw_documents) != 0:
-                    runs = math.ceil(len(raw_documents) / memory.record_limit)
-                    for run in range(runs):
-                        if is_first:
-                            self.create_vector(raw_documents[run*memory.record_limit:(run + 1)*memory.record_limit])
-                            is_first = False
-                        elif self.memory_faiss:
-                            self.add_to_vector(raw_documents[run*memory.record_limit:(run + 1)*memory.record_limit])
+                memory.setup_db_for_model(memory)
             elif memory.memory_type == 'attachments':
                 memory.rag_attatchemts()
             elif memory.memory_type == 'local_attachment':
@@ -295,7 +273,6 @@ class AIMemory(models.Model):
     def load_faiss(self):
         if self.memory_faiss:
             faiss_file = base64.b64decode(self.memory_faiss)
-            # db = FAISS.deserialize_from_bytes(faiss_file,eval(self.ai_agent_llm_id.get_embedding()), allow_dangerous_deserialization=True)
             db = FAISS.deserialize_from_bytes(faiss_file, self.ai_agent_llm_id.get_embedding(),
                                               allow_dangerous_deserialization=True)
             return db
@@ -322,13 +299,46 @@ class AIMemory(models.Model):
         return Document(id=uuid.uuid4(), page_content=f"{content}",
                         metadata={"name": attachment_id.name, "type": "attachment"})
 
-    def create_vector(self, raw_documents):
+    def setup_db_for_bs4(self,memory):
+        if not memory.url:
+            raise UserError(_(f"Missing url on memory ({self.name})"))
+        all_pages = self.scrape_website(memory.url, memory.max_nbr_pages)
+        memory.memory_markdown = base64.b64encode(all_pages)
+        raw_documents = [memory.create_document(text=all_pages, metadata={})]
+        memory.create_vector(raw_documents)
+
+    def setup_db_for_model(self,memory):
+        model_fields = eval(memory.field_list)
+        domain = safe_eval(memory.filter_domain) if memory.filter_domain else []
+        module_dicts = memory.env[memory.model_name].search(domain).read(model_fields)
+        _logger.error(f"{module_dicts=}")
+        raw_documents = []
+        is_first = True
+        runs = 0
+        for module_dict in module_dicts:
+            for key, item in module_dict.items():
+                if isinstance(item, fields.datetime) or isinstance(item, fields.date):
+                    module_dict[key] = item.isoformat()
+                if isinstance(item, bytes):
+                    module_dict[key] = base64.b64encode(item).decode("utf-8")
+            raw_documents.append(memory.create_document(text=json.dumps(module_dict), metadata=module_dict))
+        if len(raw_documents) != 0:
+            runs = math.ceil(len(raw_documents) / memory.record_limit)
+            for run in range(runs):
+                if is_first or memory.vector_type != "faiss":
+                    self.create_vector(raw_documents[run*memory.record_limit:(run + 1)*memory.record_limit],memory)
+                    is_first = False
+                elif self.memory_faiss:
+                    self.add_to_vector(raw_documents[run*memory.record_limit:(run + 1)*memory.record_limit])
+
+    def create_vector(self,raw_documents,memory):
+        documents = self.text_splitter(raw_documents)
+        embeddings = self.ai_agent_llm_id.get_embedding()
         if self.vector_type == 'faiss':
-            documents = self.text_splitter(raw_documents)
-            embeddings = self.ai_agent_llm_id.get_embedding()
-            self.test_embedd(embeddings)
             db = FAISS.from_documents(documents, embeddings)
             self.memory_faiss = base64.b64encode(db.serialize_to_bytes())
+        return documents, embeddings
+
 
     def add_to_vector(self,raw_documents):
         documents = self.text_splitter(raw_documents)
@@ -336,16 +346,6 @@ class AIMemory(models.Model):
         uuids = [str(uuid.uuid4()) for _ in range(len(documents))]
         db.add_documents(documents=documents, ids=uuids)
         self.memory_faiss = base64.b64encode(db.serialize_to_bytes())
-
-    def test_embedd(self, embeddings):
-        try:
-            embeddings.embed_query("test")
-        except KeyError as e:
-            _logger.error(f"{e=}")
-            raise UserError("The embedding is not working. Please make sure you have the correct API key.")
-        except Exception as e:
-            _logger.error(f"{e=}")
-            raise UserError(f"The embedding is not working and gave this error {e}")
 
     def log_message(self, body, is_error=False):
         if is_error:
@@ -392,3 +392,20 @@ class AIMemory(models.Model):
     def cron(self):
         self.env['ai.memory'].search(
             [('last_run', '<', fields.Datetime.now() - relativedelta(days=self.nbr_days))]).run()
+    
+   
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+        
